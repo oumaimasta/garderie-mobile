@@ -1,9 +1,23 @@
+import { useState, useRef } from 'react';
 import { View, Text, TouchableOpacity, FlatList, StyleSheet } from 'react-native';
 import { activities } from '../data/activities';
 
 export default function HomeScreen() {
+  const [message, setMessage] = useState('');
+  const timerRef = useRef(null);
+
+  const showMessage = (text) => {
+    setMessage(text);
+    clearTimeout(timerRef.current);
+    timerRef.current = setTimeout(() => setMessage(''), 2000);
+  };
+
   const renderItem = ({ item }) => (
-    <TouchableOpacity style={styles.card} activeOpacity={0.7}>
+    <TouchableOpacity
+      style={styles.card}
+      activeOpacity={0.7}
+      onPress={() => showMessage(item.titre)}
+    >
       <View style={styles.iconBox}>
         <Text style={styles.icon}>{item.icone}</Text>
       </View>
@@ -30,9 +44,15 @@ export default function HomeScreen() {
         }
       />
 
-      <TouchableOpacity style={styles.fab}>
+      <TouchableOpacity style={styles.fab} onPress={() => showMessage('Nouvelle activité')}>
         <Text style={styles.fabText}>+</Text>
       </TouchableOpacity>
+
+      {message !== '' && (
+        <View style={styles.snackbar}>
+          <Text style={styles.snackbarText}>{message}</Text>
+        </View>
+      )}
     </View>
   );
 }
@@ -61,4 +81,9 @@ const styles = StyleSheet.create({
     backgroundColor: '#4A90E2', alignItems: 'center', justifyContent: 'center', elevation: 6,
   },
   fabText: { color: '#fff', fontSize: 34, marginTop: -3 },
+  snackbar: {
+    position: 'absolute', left: 16, right: 100, bottom: 30, backgroundColor: '#2B3A55',
+    paddingVertical: 14, paddingHorizontal: 16, borderRadius: 10,
+  },
+  snackbarText: { color: '#fff', fontSize: 15 },
 });

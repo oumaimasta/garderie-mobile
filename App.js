@@ -1,17 +1,29 @@
 import 'react-native-gesture-handler';
-import { View, Text } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { createDrawerNavigator } from '@react-navigation/drawer';
 import SplashScreen from './src/screens/SplashScreen';
+import HomeScreen from './src/screens/HomeScreen';
+import AboutScreen from './src/screens/AboutScreen';
 
 const Stack = createNativeStackNavigator();
+const Drawer = createDrawerNavigator();
 
-// Page temporaire, remplacée à l'étape 6
-function TempHome() {
+function MainDrawer() {
   return (
-    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-      <Text>Page principale</Text>
-    </View>
+    <Drawer.Navigator
+      screenOptions={{
+        title: 'Ma Garderie',
+        headerStyle: { backgroundColor: '#5B9FE8' },
+        headerTintColor: '#fff',
+        headerTitleStyle: { fontWeight: 'bold' },
+        headerTitleAlign: 'center',
+      }}
+    >
+      <Drawer.Screen name="Accueil" component={HomeScreen} />
+      <Drawer.Screen name="Activités" component={HomeScreen} />
+      <Drawer.Screen name="À propos" component={AboutScreen} />
+    </Drawer.Navigator>
   );
 }
 
@@ -20,7 +32,7 @@ export default function App() {
     <NavigationContainer>
       <Stack.Navigator screenOptions={{ headerShown: false }}>
         <Stack.Screen name="Splash" component={SplashScreen} />
-        <Stack.Screen name="Main" component={TempHome} />
+        <Stack.Screen name="Main" component={MainDrawer} />
       </Stack.Navigator>
     </NavigationContainer>
   );
